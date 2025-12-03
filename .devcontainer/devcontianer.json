@@ -1,0 +1,24 @@
+{
+  "name": "C# (.NET)",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:0-6.0",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers-contrib/features/angular-cli:2": {}
+  },
+  "forwardPorts": [5001, 5000, 4200],
+  "portsAttributes": {
+    "5001": {
+      "protocol": "https"
+    }
+  },
+  "postCreateCommand": "dotnet dev-certs https",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Angular.ng-template"
+      ]
+    }
+  }
+}
