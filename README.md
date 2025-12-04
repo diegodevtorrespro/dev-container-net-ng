@@ -1,4 +1,4 @@
-# Projeto DevContainer .NET + Angular + PostgreSQL
+# Desafio TOTVS - Live Coding
 
 Este repositório contém um projeto de **desafio de Live Coding**, utilizando .NET 8, Angular 16+ e PostgreSQL, configurado dentro de um **DevContainer** para facilitar o desenvolvimento em qualquer máquina.
 
