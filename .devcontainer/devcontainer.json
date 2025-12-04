@@ -1,0 +1,21 @@
+{
+  "name": "DESAFIO - Live Coding (.NET 8 + Angular + PostgreSQL)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [5000, 4200, 5432],
+  "postCreateCommand": "dotnet dev-certs https",
+  "postStartCommand": "sudo service postgresql start",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Angular.ng-template"
+      ],
+      "settings": {
+        "dotnet-acquisition.disabled": true,
+        "omnisharp.useModernNet": true
+      }
+    }
+  },
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
+}

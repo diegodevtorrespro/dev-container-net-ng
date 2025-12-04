@@ -1,0 +1,5 @@
+{
+    "dotnet-acquisition.disabled": true,
+    "omnisharp.useModernNet": true,
+    "omnisharp.projectLoadTimeout": 120
+}
