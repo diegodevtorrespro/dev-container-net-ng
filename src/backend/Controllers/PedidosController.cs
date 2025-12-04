@@ -11,32 +11,7 @@ public class PedidosController : ControllerBase
     {
         _context = context;
     }
-
-    // private static List<dynamic> pedidosUsuario = new()
-    // {
-    //     new {
-    //         Id = Guid.NewGuid(),
-    //         Data = DateTime.UtcNow.AddDays(-4),
-    //         Status = "AguardandoPagamento",
-    //         DescontoPercentual = 0m,
-    //         Itens = new []
-    //         {
-    //             new { Id = 1, Nome = "Mouse Gamer RGB", Preco = 120.90m },
-    //             new { Id = 2, Nome = "Teclado Mecânico Redragon", Preco = 289.00m }
-    //         }
-    //     },
-    //     new {
-    //         Id = Guid.NewGuid(),
-    //         Data = DateTime.UtcNow.AddDays(-2),
-    //         Status = "EmPreparacao",
-    //         DescontoPercentual = 10m,
-    //         Itens = new []
-    //         {
-    //             new { Id = 3, Nome = "Monitor 27'' 144hz", Preco = 1499.90m }
-    //         }
-    //     }
-    // };
-
+    
     [HttpGet]
     public IActionResult GetPedidos()
     {
