@@ -11,6 +11,11 @@ RUN apt-get update && \
     npm install -g @angular/cli@16 && \
     rm -rf /var/lib/apt/lists/*
 
+# Instalar Git LFS
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get install -y git-lfs && \
+    git lfs install
+
 # Inicializar PostgreSQL e configurar usuário/senha e banco
 RUN service postgresql start && \
     sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';" && \
