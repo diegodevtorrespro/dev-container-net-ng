@@ -102,32 +102,30 @@ O projeto é um E-commerce de produtos de tecnologia e informática, onde os usu
 ### Resolva os Desafios
 
 1. **Refactoring:**
-o projeto possui na controller "Pedidos", há um endpoint para excluir o pedido pelo identificador, porém há problemas de performance boas práticas que precisam ser corrigidas. Refatore a operação considerando: 
+o projeto possui na controller "Pedidos", há um endpoint para excluir o pedido pelo identificador, porém há problemas de performance e boas práticas que precisam ser corrigidas. Refatore a operação considerando: 
 
-   - Aplica plenos um exemplo de Clean Code;
+   - Aplicar pleno menos um exemplo de Clean Code;
    - Aplicar pelo menos um exemplo de melhoria de performance;
-   - Garantir que a remoção de APENAS 1 item seja executada;
+   - Garantir que a remoção de APENAS 1 item seja executada no banco;
    - Garantir que os retornos e status code estejam de acordo com os padrões REST.
 
-2. **Garantindo adequação ao negócio com boas práticas:** na controller "Pedidos", há um endpoint realiza a adição de pedidos de acordo com os itens selecionado pelo comprador e desconto aplicado. Realiza incrementos de implementação para:
+2. **Garantindo adequação ao negócio com boas práticas:** na controller "Pedidos", há um endpoint que realiza a adição de pedidos de acordo com os itens selecionados pelo comprador e desconto aplicado. Realize incrementos de implementação para:
 
    - Aplicar ao menos um princípio SOLID;
-   - Calcular o total de pedido, somando os preços do itens selecionados e subtraindo o percentual de desconto aplicado;
-   - Layout simples usando CSS puro para demonstração;
-   - Componentes básicos de listagem de produtos e pedidos.
+   - Calcular o total de pedido, somando os preços dos itens selecionados e subtraindo o percentual de desconto aplicado;
 
-3. **BUG encontrado:** Um cliente identificou um erro ao tentar fazer um pedido onde o item Id **6** havia sido selecionado no carrinho. Realize a correção baseando-se nos seguintes critérios:
+3. **BUG encontrado:** Um cliente identificou um erro ao tentar fazer um pedido onde o item de Id **6** havia sido selecionado no carrinho. Realize a correção baseando-se nos seguintes critérios:
 
    - Simule o erro e identifique a causa raiz do problema;
-   - Elabore uma solução considerando que a criação de pedido de compor qualquer item selecionado que esteja cadastrado como um produto;
-   - Aplique as alterações necessárias via código ou banco, se atendando ao uso de abordagem *code first*;
+   - Elabore uma solução considerando que a criação de pedido deve possibilitar adicionar qualquer item selecionado que esteja cadastrado como um produto;
+   - Aplique as alterações necessárias via código ou banco, se atentando ao uso de abordagem *code first*;
 
-4. **Aplicando regras de negócio:** O PO necessita que seja criado uma forma de atualizar os dados do pedido. Para isso realize uma implementação com os seguintes critérios:
+4. **Aplicando regras de negócio:** O PO necessita que seja criada uma forma de atualizar os dados do pedido. Para isso realize uma implementação com os seguintes critérios:
 
    - Crie um endpoint para atualizar o Pedido;
-   - Caso o pedido não tenha sido encontrado retornar o status code correto;
-   - O PO definiu que os pedidos só poderão ser editados caso o pedido ainda esteja "no carrinho";
-   - Retorne as mensagem corretas ao usuário de acordo com as regras aplicadas.
+   - Caso o pedido não tenha sido encontrado, retornar o status code correto;
+   - O PO definiu que os pedidos só poderão ser editados caso ainda estejam "no carrinho";
+   - Retorne as mensagens corretas ao usuário de acordo com as regras aplicadas.
 
 ### Considerações finais
 
