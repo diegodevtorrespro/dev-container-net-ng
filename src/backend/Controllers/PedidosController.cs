@@ -1,86 +1,117 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PedidosController : ControllerBase
 {
-    private static List<dynamic> pedidosUsuario = new()
+    private readonly AppDbContext _context;
+    public PedidosController(AppDbContext context)
     {
-        new {
-            Id = Guid.NewGuid(),
-            Data = DateTime.UtcNow.AddDays(-4),
-            Status = "AguardandoPagamento",
-            DescontoPercentual = 0m,
-            Itens = new []
-            {
-                new { Id = 1, Nome = "Mouse Gamer RGB", Preco = 120.90m },
-                new { Id = 2, Nome = "Teclado Mecânico Redragon", Preco = 289.00m }
-            }
-        },
-        new {
-            Id = Guid.NewGuid(),
-            Data = DateTime.UtcNow.AddDays(-2),
-            Status = "EmPreparacao",
-            DescontoPercentual = 10m,
-            Itens = new []
-            {
-                new { Id = 3, Nome = "Monitor 27'' 144hz", Preco = 1499.90m }
-            }
-        }
-    };
+        _context = context;
+    }
 
-    [HttpGet("pedidos")]
+    // private static List<dynamic> pedidosUsuario = new()
+    // {
+    //     new {
+    //         Id = Guid.NewGuid(),
+    //         Data = DateTime.UtcNow.AddDays(-4),
+    //         Status = "AguardandoPagamento",
+    //         DescontoPercentual = 0m,
+    //         Itens = new []
+    //         {
+    //             new { Id = 1, Nome = "Mouse Gamer RGB", Preco = 120.90m },
+    //             new { Id = 2, Nome = "Teclado Mecânico Redragon", Preco = 289.00m }
+    //         }
+    //     },
+    //     new {
+    //         Id = Guid.NewGuid(),
+    //         Data = DateTime.UtcNow.AddDays(-2),
+    //         Status = "EmPreparacao",
+    //         DescontoPercentual = 10m,
+    //         Itens = new []
+    //         {
+    //             new { Id = 3, Nome = "Monitor 27'' 144hz", Preco = 1499.90m }
+    //         }
+    //     }
+    // };
+
+    [HttpGet]
     public IActionResult GetPedidos()
     {
-        var retorno = pedidosUsuario.Select(p => new {
+        var retorno = _context.Pedidos.AsNoTracking().Select(p => new {
             p.Id,
             p.Data,
             p.Status,
-            Total = CalcularTotal(p),
-            Itens = p.Itens.Length
+            p.Total,
+            p.Itens,
+            ItensCount = p.Itens.Count
         });
 
         return Ok(retorno);
     }
 
-    private decimal CalcularTotal(dynamic pedido)
-    {
-        decimal soma = 0;
-
-        foreach (var item in pedido.Itens)
-            soma += item.Preco;
-
-        if (pedido.DescontoPercentual > 0)
-            soma -= soma * (pedido.DescontoPercentual / 100);
-
-        return soma;
-    }
-
     [HttpDelete("{id:guid}")]
     public IActionResult DeletePedido(Guid id)
     {
-        var pedido = pedidosUsuario.FirstOrDefault(p => p.Id == id);
-        if (pedido == null)
-            return NotFound();
+        var todosPedidos = _context.Pedidos.AsNoTracking().Include(x => x.Itens).ToList();
 
-        pedidosUsuario.Remove(pedido);
+        Pedido? pedidoAtual = null;
+        foreach(var pedido in todosPedidos)
+        {
+            if(pedido.Id.Equals(id))
+            {
+                pedidoAtual = pedido;
+            }
+        }
+
+        if (pedidoAtual == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            _context.Pedidos.RemoveRange(todosPedidos);
+            _context.SaveChanges();
+
+            todosPedidos.Remove(pedidoAtual);
+            _context.AddRange(todosPedidos);
+            _context.SaveChanges();
+            
+            return Ok();
+        }
+        
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}")]
-    public IActionResult AtualizarStatus(Guid id, [FromBody] dynamic body)
+    [HttpPost]
+    public async Task<IActionResult> CriarPedido([FromBody] PedidoDto dto)
     {
-        var pedido = pedidosUsuario.FirstOrDefault(p => p.Id == id);
-        if (pedido == null)
-            return NotFound();
+        if (dto.Itens == null || dto.Itens.Count == 0)
+            return BadRequest("O pedido deve ter ao menos 1 item.");
 
-        string novoStatus = body?.status;
-        if (!string.IsNullOrWhiteSpace(novoStatus))
+        var pedido = new Pedido
         {
-            pedido.Status = novoStatus;
-        }
+            Id = Guid.NewGuid(),
+            Data = new DateTime(),
+            Status = StatusPedido.NoCarrinho,
+            DescontoPercentual = dto.DescontoPercentual,
+            Itens = dto.Itens.Select(i => new ItemPedido
+            {
+                Nome = i.Nome,
+                Preco = i.Preco
+            }).ToList()
+        };
 
-        return Ok(pedido);
+        _context.Pedidos.Add(pedido);
+        await _context.SaveChangesAsync();
+        return Created();
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> AtualizarPedido([FromBody] PedidoDto dto)
+    {
+        return Ok();
     }
 }

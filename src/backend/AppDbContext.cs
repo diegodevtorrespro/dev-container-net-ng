@@ -4,23 +4,28 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Catalogo> Catalogos { get; set; }
+    public DbSet<Produto> Produtos { get; set; }
+    public DbSet<Pedido> Pedidos { get; set; }
+    public DbSet<ItemPedido> ItensPedido { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Catalogo>(entity =>
+        modelBuilder.Entity<Produto>(entity =>
         {
+            entity.ToTable("Produtos");
+
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Id)
                       .UseIdentityColumn(); 
             
             entity.Property(c => c.Nome)
-                  .HasMaxLength(200)
+                  .HasMaxLength(50)
                   .IsRequired();
 
             entity.Property(c => c.Preco)
-                   .HasPrecision(18, 2)
-                   .IsRequired();
+                  .HasColumnType("decimal(10,2)")
+                  .HasPrecision(18, 2)
+                  .IsRequired();
 
             entity.Property(c => c.Categoria)
                    .HasMaxLength(100)
@@ -31,7 +36,7 @@ public class AppDbContext : DbContext
         });
 
         // Seed inicial
-        modelBuilder.Entity<Catalogo>().HasData(
+        modelBuilder.Entity<Produto>().HasData(
             new { Id = 1, Nome = "Mouse Gamer RGB", Preco = 120.90m, Categoria = "Periféricos", Estoque = 15 },
             new { Id = 2, Nome = "Teclado Mecânico Redragon", Preco = 289.00m, Categoria = "Periféricos", Estoque = 8 },
             new { Id = 3, Nome = "Monitor 27'' 144hz", Preco = 1499.90m, Categoria = "Monitores", Estoque = 5 },
@@ -45,5 +50,44 @@ public class AppDbContext : DbContext
             new { Id = 11, Nome = "Mesa Gamer", Preco = 1200.00m, Categoria = "Acessórios", Estoque = 5 },
             new { Id = 12, Nome = "Computador Gamer", Preco = 7200.00m, Categoria = "Hardware", Estoque = 3 }
         );
+
+        modelBuilder.Entity<Pedido>(entity =>
+        {
+            entity.ToTable("Pedidos");
+
+            entity.HasKey(p => p.Id);
+     
+            entity.Property(p => p.Status)
+                   .HasMaxLength(50)
+                   .IsRequired();
+     
+            entity.Property(p => p.DescontoPercentual)
+                  .HasColumnType("decimal(10,2)");
+
+            entity.HasMany(p => p.Itens)
+                   .WithOne(i => i.Pedido)
+                   .HasForeignKey(i => i.PedidoId)
+                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ItemPedido>(entity =>
+        {
+            entity.ToTable("ItensPedido");
+
+            entity.HasKey(i => i.Id);
+            entity.Property(c => c.Id)
+                      .UseIdentityColumn(); 
+
+            entity.Property(i => i.Nome)
+                  .HasMaxLength(25)
+                  .IsRequired();
+
+            entity.Property(i => i.Preco)
+                  .HasColumnType("decimal(10,2)")
+                  .HasPrecision(18, 2)
+                  .IsRequired();
+        });
+
+
     }
 }

@@ -1,0 +1,10 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ product.name }}</mat-card-title>
+    <mat-card-subtitle>R$ {{ product.price }}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="product.image" alt="{{ product.name }}">
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="addToCart()">Adicionar ao Carrinho</button>
+  </mat-card-actions>
+</mat-card>

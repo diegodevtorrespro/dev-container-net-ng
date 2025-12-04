@@ -1,0 +1,19 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #f5f5f5; /* Fundo leve para o sidebar */
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

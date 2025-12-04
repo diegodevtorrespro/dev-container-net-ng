@@ -4,10 +4,10 @@ namespace backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CatalogosController : ControllerBase
+public class ProdutosController : ControllerBase
 {
     private readonly AppDbContext _context;
-    public CatalogosController(AppDbContext context)
+    public ProdutosController(AppDbContext context)
     {
         _context = context;
     }
@@ -15,6 +15,6 @@ public class CatalogosController : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> GetAsync()
     {
-        return Ok(await _context.Catalogos.ToListAsync());
+        return Ok(await _context.Produtos.ToListAsync());
     }
 }
