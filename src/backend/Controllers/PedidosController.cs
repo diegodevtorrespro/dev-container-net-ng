@@ -11,9 +11,9 @@ public class PedidosController : ControllerBase
     {
         _context = context;
     }
-    
+
     [HttpGet]
-    public IActionResult GetPedidos()
+    public ActionResult<List<Pedido>> GetPedidos()
     {
         var retorno = _context.Pedidos.AsNoTracking().Select(p => new {
             p.Id,
@@ -30,34 +30,24 @@ public class PedidosController : ControllerBase
     [HttpDelete("{id:guid}")]
     public IActionResult DeletePedido(Guid id)
     {
-        var todosPedidos = _context.Pedidos.AsNoTracking().Include(x => x.Itens).ToList();
-
-        Pedido? pedidoAtual = null;
-        foreach(var pedido in todosPedidos)
+        try
         {
-            if(pedido.Id.Equals(id))
+            Pedido? order = GetOrderByGuiId(id);
+
+            if (order == null)
+                return NotFound();
+            else
             {
-                pedidoAtual = pedido;
+                _context.Pedidos.Remove(order);
+                _context.SaveChanges();
+
+                return Ok();
             }
-        }
-
-        if (pedidoAtual == null)
+        }catch(Exception ex)
         {
-            return NotFound();
+            Console.Write(ex.InnerException);   
+            return BadRequest();         
         }
-        else
-        {
-            _context.Pedidos.RemoveRange(todosPedidos);
-            _context.SaveChanges();
-
-            todosPedidos.Remove(pedidoAtual);
-            _context.AddRange(todosPedidos);
-            _context.SaveChanges();
-            
-            return Ok();
-        }
-        
-        return NoContent();
     }
 
     [HttpPost]
@@ -65,22 +55,22 @@ public class PedidosController : ControllerBase
     {
         if (dto.Itens == null || dto.Itens.Count == 0)
             return BadRequest("O pedido deve ter ao menos 1 item.");
+        
+        if (dto.Itens.Any(e => e.Preco <= 0))
+            return BadRequest("Os itens devem possuir valores maiores que zero.");
 
-        var pedido = new Pedido
-        {
-            Id = Guid.NewGuid(),
-            Data = new DateTime(),
-            Status = StatusPedido.NoCarrinho,
-            DescontoPercentual = dto.DescontoPercentual,
-            Itens = dto.Itens.Select(i => new ItemPedido
-            {
-                Nome = i.Nome,
-                Preco = i.Preco
-            }).ToList()
-        };
+        Pedido pedido = CreateOrder(dto);
+
+        pedido.Itens = CreateOrderItens(dto.Itens);
+        
+        decimal totalizer = GenereteTotlizerOrderItens(dto.Itens);
+
+        pedido.Total = SumDescaontPercent(totalizer, dto.DescontoPercentual);
 
         _context.Pedidos.Add(pedido);
+
         await _context.SaveChangesAsync();
+        
         return Created();
     }
 
@@ -88,5 +78,40 @@ public class PedidosController : ControllerBase
     public async Task<IActionResult> AtualizarPedido([FromBody] PedidoDto dto)
     {
         return Ok();
+    }
+
+    private Pedido? GetOrderByGuiId(Guid id)
+    {
+        return _context.Pedidos.Where(e => e.Id == id).FirstOrDefault(); 
+    }
+
+    private Pedido CreateOrder(PedidoDto order)
+    {
+        return new Pedido
+        {
+            Id = Guid.NewGuid(),
+            Data = DateTime.UtcNow,
+            Status = StatusPedido.NoCarrinho,
+            DescontoPercentual = order.DescontoPercentual,
+        };
+    }   
+
+    private List<ItemPedido> CreateOrderItens(List<ItemPedidoDto> listItens)
+    {
+        return listItens.Select(i => new ItemPedido
+            {
+                Nome = i.Nome,
+                Preco = i.Preco
+            }).ToList();
+    }
+
+    private decimal GenereteTotlizerOrderItens(List<ItemPedidoDto> itens)
+    {
+        return itens.Sum(e => e.Preco);
+    }
+
+    private decimal SumDescaontPercent(decimal totalize, decimal descaunt)
+    {
+        return  (totalize * (1 - (descaunt / 100)));
     }
 }
