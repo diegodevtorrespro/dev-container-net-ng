@@ -104,7 +104,7 @@ O projeto é um E-commerce de produtos de tecnologia e informática, onde os usu
 1. **Refactoring:**
 o projeto possui na controller "Pedidos", um endpoint para excluir o pedido pelo identificador, porém há problemas de performance e más práticas que precisam ser corrigidas. Refatore a operação considerando: 
 
-   - Aplicar pleno menos um exemplo de Clean Code;
+   - Aplicar pelo menos um exemplo de Clean Code;
    - Aplicar pelo menos um exemplo de melhoria de performance;
    - Garantir que a remoção de APENAS 1 item seja executada no banco.
 
@@ -122,8 +122,8 @@ o projeto possui na controller "Pedidos", um endpoint para excluir o pedido pelo
 4. **Manutenção no frontend:** um usuário identificou que ao clicar no botão adicionar na lista de produtos, não está contabilizando no carrinho de compras. Faça uma manutenção no código para que contabilize a quantidade de itens adicionados no carrinho:
 
    - Simule o erro e demonstre-o;
-   - Identifique no código o método que é acionado para "contar" os itens do carrinho;
-   - Implemente no método o contador para que seja exibido no ícone de carrinha no cabeçalho da página.
+   - Identifique no código o componente que faz a exibição do ícone de carrinho;
+   - Implemente uma forma de atribuir o contador no ícone do carrinho, de modo que ele atualize toda vez que adicionar um item.
 
 5. (EXTRA) **Aplicando regras de negócio:** O PO necessita que seja criada uma forma de atualizar os dados do pedido. Para isso realize uma implementação com os seguintes critérios:
 
