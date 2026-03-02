@@ -1,12 +1,13 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { CartService } from '../../core/cart.service';
+import { CartService } from 'src/app/core/cart.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -24,14 +25,19 @@ import { CartService } from '../../core/cart.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-  @ViewChild('sidenav') sidenav!: MatSidenav;
-  cartService = inject(CartService);
+  cartCount = 0;
+  
+  @Output() toggleMenu = new EventEmitter<void>();
 
-  get cartCount() {
-    return this.cartService.getCartCount();
+  ngOnInit() {
+    
   }
 
-  toggleSidebar() {
-    this.sidenav.toggle();
+  onToggleMenu() {
+    this.toggleMenu.emit();
+  }
+
+  ngOnDestroy() {
+    
   }
 }

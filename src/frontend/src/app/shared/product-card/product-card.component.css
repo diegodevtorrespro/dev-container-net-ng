@@ -1,14 +1,15 @@
-mat-card {
-  max-width: 300px;
-  margin: 10px;
-  transition: box-shadow 0.3s;
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-mat-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-img {
-  height: 150px;
+.product-card img {
   object-fit: cover;
+  max-height: 200px;
+}
+
+mat-card-actions {
+  margin-top: auto;
+  padding: 16px;
 }

@@ -1,0 +1,18 @@
+/* Mantemos o CSS Grid mágico aqui no pai */
+.page-container {
+  padding: 24px;
+  height: 100%;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}

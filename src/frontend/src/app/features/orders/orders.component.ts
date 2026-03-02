@@ -1,17 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { CartService } from '../../core/cart.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, CommonModule], 
   template: `
     <app-header></app-header>
     <div class="content">
       <h2>Meus Pedidos</h2>
       <ul>
-        <li *ngFor="let item of cartItems">{{ item.name }} - R$ {{ item.price }}</li>
+        <li *ngFor="let item of cartItems">{{ item.nome }} - R$ {{ item.preco }}</li>
       </ul>
     </div>
   `,

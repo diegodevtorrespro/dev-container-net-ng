@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../../core/product.service'; // Ajuste o caminho se necessário
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ProductCardComponent } from '../../shared/product-card/product-card.component';
-import { Product } from '../../core/cart.service';
+import { Observable } from 'rxjs';
+import { Product } from '../../shared/models/product-model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent, ProductCardComponent],
+  imports: [CommonModule, HeaderComponent, ProductCardComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  products: Product[] = [
-    { id: 1, name: 'Laptop Dell', price: 2500, image: 'https://via.placeholder.com/150' },
-    { id: 2, name: 'Mouse Logitech', price: 50, image: 'https://via.placeholder.com/150' },
-    { id: 3, name: 'Teclado Mecânico', price: 150, image: 'https://via.placeholder.com/150' },
-    // Adicione mais produtos fake conforme necessário
-  ];
+export class HomeComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+
+  // Criamos o stream de dados que o template vai assinar
+  products$: Observable<Product[]> = this.productService.products$;
+
+  ngOnInit(): void {
+    // Dispara a chamada ao backend .NET 6 assim que a Home carrega
+    this.productService.refreshProducts().subscribe();
+  }
 }

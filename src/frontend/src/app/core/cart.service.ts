@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-}
+import { Product } from '../shared/models/product-model';
 
 @Injectable({
   providedIn: 'root',

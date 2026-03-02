@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
   {
     path: '',
     loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
@@ -10,9 +11,9 @@ const routes: Routes = [
     path: 'orders',
     loadComponent: () => import('./features/orders/orders.component').then(m => m.OrdersComponent),
   },
-  {
-    path: 'products',
-    loadComponent: () => import('./features/products/products.component').then(m => m.ProductsComponent),
+  { 
+    path: 'products', 
+    loadComponent: () => import('./features/products/products.component').then(m => m.ProductsComponent)
   },
   {
     path: 'contact',
