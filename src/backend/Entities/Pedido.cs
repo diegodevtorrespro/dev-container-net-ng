@@ -8,8 +8,21 @@ public class Pedido
 
     public List<ItemPedido> Itens { get; set; } = new();
 
-    public void CalcularTotal()
+    public decimal CalcularTotalComDesconto(List<ItemPedido> itensPedido, decimal descontoPercentual)
     {
-        
+        decimal total = 0;
+
+        foreach(var item in itensPedido)
+        {
+            if(item.Preco > 0)
+            {
+                var precoItemDesconto =  item.Preco - (item.Preco/100) * descontoPercentual; 
+
+                total += precoItemDesconto;
+                
+                // /100 * descontoPercentual;    
+            }
+        }
+        return total;
     }
 }

@@ -30,34 +30,21 @@ public class PedidosController : ControllerBase
     [HttpDelete("{id:guid}")]
     public IActionResult DeletePedido(Guid id)
     {
-        var todosPedidos = _context.Pedidos.AsNoTracking().Include(x => x.Itens).ToList();
+        var pedido = _context.Pedidos.AsNoTracking()
+                                     .Where(x => x.Id == id)
+                                     .FirstOrDefault();
 
-        Pedido? pedidoAtual = null;
-        foreach(var pedido in todosPedidos)
-        {
-            if(pedido.Id.Equals(id))
-            {
-                pedidoAtual = pedido;
-            }
-        }
-
-        if (pedidoAtual == null)
+        if (pedido is null)
         {
             return NotFound();
         }
         else
         {
-            _context.Pedidos.RemoveRange(todosPedidos);
-            _context.SaveChanges();
-
-            todosPedidos.Remove(pedidoAtual);
-            _context.AddRange(todosPedidos);
+            _context.Pedidos.Remove(pedido);
             _context.SaveChanges();
             
             return Ok();
         }
-        
-        return NoContent();
     }
 
     [HttpPost]
@@ -78,6 +65,8 @@ public class PedidosController : ControllerBase
                 Preco = i.Preco
             }).ToList()
         };
+
+        pedido.Total = pedido.CalcularTotalComDesconto(pedido.Itens, pedido.DescontoPercentual);
 
         _context.Pedidos.Add(pedido);
         await _context.SaveChangesAsync();
