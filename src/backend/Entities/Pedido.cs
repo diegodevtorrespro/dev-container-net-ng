@@ -8,8 +8,14 @@ public class Pedido
 
     public List<ItemPedido> Itens { get; set; } = new();
 
-    public void CalcularTotal()
+    public decimal CalcularTotal()
     {
-        
+       return Itens.Sum(x => x.Preco);
+    }
+
+    public decimal desconto()
+    {
+        var valorTotal = CalcularTotal();
+        return valorTotal * (DescontoPercentual / 100); 
     }
 }
