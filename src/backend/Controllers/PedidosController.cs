@@ -30,7 +30,7 @@ public class PedidosController : ControllerBase
     [HttpDelete("{id:guid}")]
     public IActionResult DeletePedido(Guid id)
     {
-        var todosPedidos = _context.Pedidos.AsNoTracking().Include(x => x.Itens).ToList();
+        var todosPedidos = _context.Pedidos.AsNoTracking().Include(x => x.Itens.FirstOrDefault(y => y.Pedido.Id == id)).ToList();
 
         Pedido? pedidoAtual = null;
         foreach(var pedido in todosPedidos)
@@ -38,23 +38,14 @@ public class PedidosController : ControllerBase
             if(pedido.Id.Equals(id))
             {
                 pedidoAtual = pedido;
+                RemovePedido(_context, id, todosPedidos);
+                return Ok();
             }
         }
 
         if (pedidoAtual == null)
         {
             return NotFound();
-        }
-        else
-        {
-            _context.Pedidos.RemoveRange(todosPedidos);
-            _context.SaveChanges();
-
-            todosPedidos.Remove(pedidoAtual);
-            _context.AddRange(todosPedidos);
-            _context.SaveChanges();
-            
-            return Ok();
         }
         
         return NoContent();
@@ -66,21 +57,8 @@ public class PedidosController : ControllerBase
         if (dto.Itens == null || dto.Itens.Count == 0)
             return BadRequest("O pedido deve ter ao menos 1 item.");
 
-        var pedido = new Pedido
-        {
-            Id = Guid.NewGuid(),
-            Data = new DateTime(),
-            Status = StatusPedido.NoCarrinho,
-            DescontoPercentual = dto.DescontoPercentual,
-            Itens = dto.Itens.Select(i => new ItemPedido
-            {
-                Nome = i.Nome,
-                Preco = i.Preco
-            }).ToList()
-        };
+        Task<IActionResult> valorTotalPedidos = CriarPedido(dto, _context);
 
-        _context.Pedidos.Add(pedido);
-        await _context.SaveChangesAsync();
         return Created();
     }
 
@@ -89,4 +67,47 @@ public class PedidosController : ControllerBase
     {
         return Ok();
     }
+   
+ 
+    public void RemovePedido(AppDbContext _context, Guid _Pedido, List<Pedido>? _todosPedidos)
+    {
+            if (_todosPedidos is null)
+                _todosPedidos = new List<Pedido>();
+            _context.Remove(_Pedido);
+            _context.AddRange(_todosPedidos);
+            _context.SaveChanges();
+    }
+
+    public async Task<IActionResult> CriarPedido(PedidoDto _dto, AppDbContext _context)
+    {
+        var pedido = new Pedido
+        {
+            Id = Guid.NewGuid(),
+            Data = new DateTime(),
+            Status = StatusPedido.NoCarrinho,
+            DescontoPercentual = _dto.DescontoPercentual,
+            Itens = _dto.Itens.Select(i => new ItemPedido
+            {
+                Nome = i.Nome,
+                Preco = i.Preco
+            }).ToList()
+        };
+
+        _context.Pedidos.Add(pedido);
+        await _context.SaveChangesAsync();
+
+        return Created();
+
+    }
+
+    public decimal CalculaTotalPedidos(AppDbContext _context)
+    {
+        //Calcular o total de pedido, somando os preços dos itens selecionados e subtraindo o percentual de desconto aplicado;
+        decimal _totalPedidos = 0;
+        foreach(var pedido in _context.Pedidos){
+            _totalPedidos = pedido.Total - ((pedido.Total * pedido.DescontoPercentual) / 100);
+        }
+        return 0;
+    }
+
 }
