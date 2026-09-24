@@ -6,8 +6,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { CartService } from 'src/app/core/cart.service';
-import { Subscription } from 'rxjs';
+import { SessionService } from 'src/app/core/session.service';
 
 @Component({
   selector: 'app-header',
@@ -25,8 +24,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
+  private readonly sessionService = inject(SessionService);
+
   cartCount = 0;
-  
+  sessionToken = this.sessionService.ensureSessionToken();
+
   @Output() toggleMenu = new EventEmitter<void>();
 
   ngOnInit() {

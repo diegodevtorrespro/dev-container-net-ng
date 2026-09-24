@@ -2,11 +2,16 @@
   <button mat-icon-button (click)="onToggleMenu()">
     <mat-icon>menu</mat-icon>
   </button>
-  
+
   <span>E-Commerce Tech</span>
-  
+
   <span class="spacer"></span>
-  
+
+  <div class="session-chip" title="Identificador de sessão da página">
+    <mat-icon>vpn_key</mat-icon>
+    <span>{{ sessionToken }}</span>
+  </div>
+
   <button mat-icon-button>
     <mat-icon matBadge="{{ cartCount }}" matBadgeColor="accent">shopping_cart</mat-icon>
   </button>
