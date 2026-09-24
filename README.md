@@ -1,4 +1,4 @@
-# Desafio TOTVS - Live Coding
+﻿# Desafio Técnico TOTVS - Live Coding
 
 Este repositório contém um projeto de **desafio de Live Coding**, utilizando .NET 8, Angular 16+ e PostgreSQL, configurado dentro de um **DevContainer** para facilitar o desenvolvimento em qualquer máquina.
 
@@ -79,27 +79,13 @@ O projeto utiliza as seguintes tecnologias:
 
 ---
 
-## Desafio Live Coding
+## Contexto
 
-O objetivo deste projeto é servir como base para um **desafio de Live Coding**, testando:
+Plataforma de e-commerce de tecnologia onde usuários visualizam produtos, adicionam ao carrinho e criam pedidos. Alguns componentes possuem bugs que precisam ser identificados e corrigidos.
 
-- Criação de APIs REST com .NET 8
-- Mapeamento de entidades com Entity Framework Core
-- Uso de Migrations e Seed de dados
-- Criação de um frontend Angular simples consumindo a API
-- Uso de DevContainer para padronização do ambiente de desenvolvimento
-- Boas práticas de clean code e solid
+---
 
-### Case
-O projeto é um E-commerce de produtos de tecnologia e informática, onde os usuários podem:
-
-- Visualizar produtos (hardware, periféricos, acessórios, softwares, etc.)
-- Adicionar produtos ao carrinho
-- Criar pedidos (checkout)
-- Consultar seus pedidos
-- Realizar ações básicas de CRUD (Create, Read, Update, Delete) em produtos e pedidos
-
-### Resolva os Desafios
+## Desafios
 
 1. **Refactoring:**
 o projeto possui na controller "Pedidos", um endpoint para excluir o pedido pelo identificador, porém há problemas de performance e más práticas que precisam ser corrigidas. Refatore a operação considerando: 
@@ -132,6 +118,27 @@ o projeto possui na controller "Pedidos", um endpoint para excluir o pedido pelo
    - O PO definiu que os pedidos só poderão ser editados caso ainda estejam "no carrinho";
    - Retorne as mensagens corretas ao usuário de acordo com as regras aplicadas.
 
+6. (EXTRA) **Segurança:** Foi identificado um problema de token em storage inseguro, onde a aplicação pode estar armazenando credenciais de forma vulnerável.
+
+- Identificar se esse problema de fato está ocorrendo
+- Implementar forma de armazenar tokens com segurança
+- Implementar forma de expirar/ limpar tokens onde faça sentido
+
+7. (EXTRA) **Evolução arquitetural:** É necessário implementar um sistema de notificação quando pedidos são criados.
+
+- Criar estrutura que publique eventos ao criar pedido
+- Simular o envio de notificação/ e-mail ao receber evento (registro em log)
+
+---
+
+## ⚠️ Limitações do Teste
+
+- ❌ **Sem IA:** Não use ChatGPT, Copilot ou similares para escrever código
+- ❌ **Sem pesquisa:** Não pesquise soluções prontas em Stack Overflow, Google, etc.
+- ❌ **Sem debugging:** Não use debugger
+
+---
+
 ### Considerações finais
 
 Atente-se a resolver os problemas conforme o tempo estipulado, porém não se preocupe caso não consiga chegar até o final, o importante é que esclareça o que foi feito. Ao final do desafio algumas perguntas serão realizadas para entendermos melhor como chegou a determinada solução.
@@ -139,7 +146,5 @@ Atente-se a resolver os problemas conforme o tempo estipulado, porém não se pr
 # Boa Sorte!
 
 “May the force be with you!”
-
-
 
 > **Observação:** Este projeto é um **exemplo de desafio técnico**, focado em testar habilidades de backend, frontend e uso de containers, sem se preocupar com produção ou escalabilidade.
