@@ -120,14 +120,14 @@ o projeto possui na controller "Pedidos", um endpoint para excluir o pedido pelo
 
 6. (EXTRA) **Segurança:** Foi identificado um problema de token em storage inseguro, onde a aplicação pode estar armazenando credenciais de forma vulnerável.
 
-- Identificar se esse problema de fato está ocorrendo
-- Implementar forma de armazenar tokens com segurança
-- Implementar forma de expirar/ limpar tokens onde faça sentido
+   - Identificar se esse problema de fato está ocorrendo
+   - Implementar forma de armazenar tokens com segurança
+   - Implementar forma de expirar/ limpar tokens onde faça sentido
 
 7. (EXTRA) **Evolução arquitetural:** É necessário implementar um sistema de notificação quando pedidos são criados.
 
-- Criar estrutura que publique eventos ao criar pedido
-- Simular o envio de notificação/ e-mail ao receber evento (registro em log)
+   - Criar estrutura que publique eventos ao criar pedido
+   - Simular o envio de notificação/ e-mail ao receber evento (registro em log)
 
 ---
 
